@@ -20,6 +20,12 @@ export const signIn = async (req, res) => {
       return res.status(400).json({ message: "Invalid Credentials" });
 
     res.status(200).json({ result: existingUser, token });
+
+    const token = jwt.sign(
+      { email: existingUser.email, id: existingUser.id },
+      process.env.SECRET_KEY,
+      { expiresIn: "10h" }
+    );
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
   }
@@ -44,7 +50,7 @@ export const signUp = async (req, res) => {
 
     const token = jwt.sign(
       { email: result.email, id: result.id },
-      "Secret_Key_Here",
+      process.env.SECRET_KEY,
       { expiresIn: "10h" }
     );
 
